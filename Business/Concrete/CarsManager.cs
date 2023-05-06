@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +22,24 @@ namespace Business.Concrete
 
         public void Add(Car car)
         {
-            if (car.Description.Length >= 2 && car.DailyPrice > 0)
+            using (RentaCarContext context = new RentaCarContext())
             {
-                _carsDal.Add(car);
+                if (car.Description.Length >= 2 && car.DailyPrice > 0)
+                {
+                    _carsDal.Add(car);
+                }
+                else
+                {
+                    throw new Exception("Gerekli şartlar sağlanmıyor");
+                }
             }
-            else
+        }
+
+        public void Delete(Car car)
+        {
+            using (RentaCarContext context = new RentaCarContext())
             {
-                throw new Exception("Gerekli şartlar sağlanmıyor");
+                _carsDal.Delete(car);
             }
         }
 
@@ -43,6 +56,23 @@ namespace Business.Concrete
         public List<Car> GetCarsByColorId(int colorId)
         {
             return _carsDal.GetAll(p => p.ColorId == colorId).ToList();
+        }
+
+        public List<CarDetailDto> GetCarsDetails()
+        {
+            return _carsDal.GetCarDetails();
+        }
+
+        public void Update(Car car)
+        {
+            if (car.Description.Length >= 2 && car.DailyPrice > 0)
+            {
+                _carsDal.Update(car);
+            }
+            else
+            {
+                throw new Exception("Gerekli şartlar sağlanmıyor");
+            }
         }
     }
 }

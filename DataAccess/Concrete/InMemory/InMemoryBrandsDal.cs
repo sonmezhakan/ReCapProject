@@ -1,4 +1,5 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,11 @@ namespace DataAccess.Concrete.InMemory
         }
 
         public void Update(Brand entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Brand IEntityRepository<Brand>.Get(Expression<Func<Brand, bool>> filter)
         {
             throw new NotImplementedException();
         }

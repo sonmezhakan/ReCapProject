@@ -1,4 +1,5 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,11 @@ namespace DataAccess.Concrete.InMemory
         }
 
         public void Update(Color entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        Color IEntityRepository<Color>.Get(Expression<Func<Color, bool>> filter)
         {
             throw new NotImplementedException();
         }
