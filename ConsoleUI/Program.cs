@@ -1,34 +1,36 @@
 ﻿using Business.Concrete;
+using Core.Result;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System.Drawing;
 using Color = Entities.Concrete.Color;
 
-internal class Program
+public class Program
 {
+
     private static void Main(string[] args)
     {
         CarsManager carsManager = new CarsManager(new EfCarDal());
-        CarAdd(carsManager);
+        /*CarAdd(carsManager);
         CarUpdate(carsManager);
-        CarDelete(carsManager);
+        CarDelete(carsManager);*/
         CarDtoList(carsManager);
 
         Line();
 
         BrandsManager brandsManager = new BrandsManager(new EfBrandDal());
-        BrandAdd(brandsManager);
+        /*BrandAdd(brandsManager);
         BrandUpdate(brandsManager);
-        BrandDelete(brandsManager);
+        BrandDelete(brandsManager);*/
         BrandGetAll(brandsManager);
 
         Line();
 
         ColorsManager colorsManager = new ColorsManager(new EfColorDal());
-        ColorAdd(colorsManager);
+        /*ColorAdd(colorsManager);
         ColorUpdate(colorsManager);
-        ColorDelete(colorsManager);
+        ColorDelete(colorsManager);*/
         ColorGetAll(colorsManager);
         
 
@@ -41,26 +43,47 @@ internal class Program
 
     private static void ColorGetAll(ColorsManager colorsManager)
     {
-        foreach (var color in colorsManager.GetAll())
+       var result = colorsManager.GetAll();
+
+        if (result.Success)
         {
-            Console.WriteLine("{0} {1}", color.ColorId, color.ColorName);
+            foreach (var color in result.Data)
+            {
+                Console.WriteLine("{0} {1}", color.ColorId, color.ColorName);
+            }
         }
+
+        Console.WriteLine(result.Message);
     }
 
     private static void BrandGetAll(BrandsManager brandsManager)
     {
-        foreach (var brand in brandsManager.GetAll())
+        var result = brandsManager.GetAll();
+
+        if (result.Success)
         {
-            Console.WriteLine("{0} {1}", brand.BrandId, brand.BrandName);
+            foreach (var brand in result.Data)
+            {
+                Console.WriteLine("{0} {1}", brand.BrandId, brand.BrandName);
+            }
         }
+
+        Console.WriteLine(result.Message);
     }
 
     private static void CarDtoList(CarsManager carsManager)
     {
-        foreach (var carDto in carsManager.GetCarsDetails())
+        var result = carsManager.GetCarsDetails();
+        if(result.Success)
         {
-            Console.WriteLine("{0} {1} {2} {3} {4}", carDto.CarId, carDto.BrandName, carDto.ColorName, carDto.DailyPrice, carDto.Description);
+            foreach (var carDto in result.Data)
+            {
+                Console.WriteLine("{0} {1} {2} {3} {4}", carDto.CarId, carDto.BrandName, carDto.ColorName, carDto.DailyPrice, carDto.Description);
+            }
         }
+
+        Console.WriteLine(result.Message);
+
     }
 
     private static void ColorDelete(ColorsManager colorsManager)
@@ -142,7 +165,9 @@ internal class Program
             ColorId = 1,
             ModelYear = 2023,
             DailyPrice = 400,
-            Description = "Testing6"
+            Description = "a"
         });
+
+        
     }
 }

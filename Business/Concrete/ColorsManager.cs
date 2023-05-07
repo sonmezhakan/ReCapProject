@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Result;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
@@ -19,38 +21,32 @@ namespace Business.Concrete
             _colorsDal = colorsDal;
         }
 
-        public void Add(Color color)
+        public IResult Add(Color color)
         {
-            using (RentaCarContext context = new RentaCarContext())
-            {
-                _colorsDal.Add(color);
-            }
+            _colorsDal.Add(color);
+            return new SuccessResult(Messages.ColorAdded);
         }
 
-        public void Delete(Color color)
+        public IResult Delete(Color color)
         {
-            using (RentaCarContext context = new RentaCarContext())
-            {
-                _colorsDal.Delete(color);
-            }
+            _colorsDal.Delete(color);
+            return new SuccessResult(Messages.ColorDeleted);
         }
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colorsDal.GetAll();
+            return new SuccessDataResult<List<Color>>(_colorsDal.GetAll(),Messages.ColorListed);
         }
 
-        public List<Color> GetById(int colorId)
+        public IDataResult<List<Color>> GetById(int colorId)
         {
-            return _colorsDal.GetAll(c => colorId == colorId).ToList();
+            return new SuccessDataResult<List<Color>>( _colorsDal.GetAll(c => colorId == colorId).ToList());
         }
 
-        public void Update(Color color)
+        public IResult Update(Color color)
         {
-            using (RentaCarContext context = new RentaCarContext())
-            {
-                _colorsDal.Update(color);
-            }
+            _colorsDal.Update(color);
+            return new SuccessResult(Messages.ColorUpdated);
         }
     }
 }

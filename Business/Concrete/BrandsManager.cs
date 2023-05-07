@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Result;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
@@ -19,38 +21,32 @@ namespace Business.Concrete
             _brandsDal = brandsDal;
         }
 
-        public void Add(Brand brand)
+        public IResult Add(Brand brand)
         {
-            using (RentaCarContext context = new RentaCarContext())
-            {
-                _brandsDal.Add(brand);
-            }
+            _brandsDal.Add(brand);
+            return new SuccessResult(Messages.BrandAdded);
         }
 
-        public void Delete(Brand brand)
+        public IResult Delete(Brand brand)
         {
-            using (RentaCarContext context = new RentaCarContext())
-            {
-                _brandsDal.Delete(brand);
-            }
+            _brandsDal.Delete(brand);
+            return new SuccessResult(Messages.BrandDeleted);
         }
 
-        public List<Brand> GetAll()
+        public IDataResult<List<Brand>> GetAll()
         {
-            return _brandsDal.GetAll();
+            return new SuccessDataResult<List<Brand>>(_brandsDal.GetAll(),Messages.BrandListed);
         }
 
-        public List<Brand> GetById(int brandId)
+        public IDataResult<List<Brand>> GetById(int brandId)
         {
-            return _brandsDal.GetAll(b => b.BrandId == brandId).ToList();
+            return new SuccessDataResult<List<Brand>>(_brandsDal.GetAll(b => b.BrandId == brandId).ToList());
         }
 
-        public void Update(Brand brand)
+        public IResult Update(Brand brand)
         {
-            using (RentaCarContext context = new RentaCarContext())
-            {
-                _brandsDal.Update(brand);
-            }
+            _brandsDal.Update(brand);
+            return new SuccessResult(Messages.BrandUpdated);
         }
     }
 }
