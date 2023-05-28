@@ -1,6 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Core.Result;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Result;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
@@ -21,18 +24,11 @@ namespace Business.Concrete
         {
             _carsDal = carsDal;
         }
-
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.Description.Length < 2)
-            {
-                return new ErrorResult(Messages.CarNameInvalid);
-            }
-            else
-            {
-                _carsDal.Add(car);
-                return new SuccessResult(Messages.CarAdded);
-            }
+            _carsDal.Add(car);
+            return new SuccessResult(Messages.CarAdded);
         }
 
         public IResult Delete(Car car)
@@ -43,7 +39,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetAll()
         {
-            return new SuccessDataResult<List<Car>>(_carsDal.GetAll(),Messages.CarsListed);
+            return new SuccessDataResult<List<Car>>(_carsDal.GetAll(), Messages.CarsListed);
         }
 
         public IDataResult<List<Car>> GetCarById(int id)
@@ -63,21 +59,13 @@ namespace Business.Concrete
 
         public IDataResult<List<CarDetailDto>> GetCarsDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carsDal.GetCarDetails(),Messages.CarsListed);
+            return new SuccessDataResult<List<CarDetailDto>>(_carsDal.GetCarDetails(), Messages.CarsListed);
         }
-
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
-            if (car.Description.Length <2)
-            {
-                return new ErrorResult(Messages.CarNameInvalid);
-            }
-            else
-            {
-                _carsDal.Update(car);
-                return new SuccessResult(Messages.CarUpdated);
-                
-            }
+            _carsDal.Update(car);
+            return new SuccessResult(Messages.CarUpdated);
         }
     }
 }

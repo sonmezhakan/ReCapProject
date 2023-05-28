@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Core.Result;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Result;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
@@ -20,7 +22,7 @@ namespace Business.Concrete
         {
             _customersDal = customersDal;
         }
-
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Add(Customer customer)
         {
             _customersDal.Add(customer);
@@ -47,7 +49,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<CustomerDetailDto>>(_customersDal.GetCustomer(),Messages.CustomerListed);
         }
-
+        [ValidationAspect(typeof(CustomerValidator))]
         public IResult Update(Customer customer)
         {
             _customersDal.Update(customer);

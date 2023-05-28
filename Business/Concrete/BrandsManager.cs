@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Core.Result;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Result;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
@@ -20,7 +22,7 @@ namespace Business.Concrete
         {
             _brandsDal = brandsDal;
         }
-
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
             _brandsDal.Add(brand);
@@ -42,7 +44,7 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<List<Brand>>(_brandsDal.GetAll(b => b.BrandId == brandId).ToList());
         }
-
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Update(Brand brand)
         {
             _brandsDal.Update(brand);
